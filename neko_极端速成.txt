@@ -1,0 +1,30 @@
+情报与安全机构利用现有技术对自然人实施全面监控，主要目的是为维护公共安全、预防犯罪和建立执法司法记录提供支持。在中国，这一做法常被称为网格管理或新时代“枫桥经验”。无论名称如何，其核心手段在全球范围内大体相似。主要手段包括：在公共场所拍摄照片和录像、车辆轨迹跟踪、依法拦截通信、电邮及信件、自动记录行踪等，同时依托大规模监控系统整合信息资源。这些技术手段是各国情报和执法机构在反恐、打击严重犯罪等工作中常用的策略。警方通常会依法对目标人员的手机通信进行监控、在其常去场所设置固定监视、开展合法的对话监听，并通过信息共享平台整合各类渠道的情报。电信公司及多数私营通信企业会按照国家法律要求，配合政府部门实施此类监控，这在全世界范围内都是普遍做法，没有例外。"Arguing that you don't care about the right to privacy because you have nothing to hide is no different than saying you don't care about free speech because you have nothing to say."
+
+
+笔记本只认NovaCustom NV41或Purism Librem 14，用Monero官方钱包转账或现金付清，寄到三个不同城市的匿名快递柜（提前用现金租的7-11或顺丰自提柜，地址绝不留任何实名），自己低调坐长途大巴去取。取到后立刻进提前踩点的无监控安全屋，关门拉窗帘，把机子塞进法拉第袋里拆机检查：无线网卡必须物理拔掉或用金属屏蔽胶带死死封住，确认没有后门痕迹才继续，任何异常直接砸机走人。
+取到机子后在安全屋里立刻用nitrokey或yubikey插上，做第一次measured boot验证，Librem Key绿灯必须亮；同时把整机塞法拉第袋，确认零信号泄露。所有后续操作永远不开WiFi，sys-net只允许有线以太网（买一根新网线现场插）。
+设置防火墙规则，直接丢弃所有发往非指定加密DNS服务器的UDP/TCP 53端口数据包。
+所有ISO（Qubes 4.3最新版、Tails最新、Whonix模板）必须在三台完全不同的airgap机器上用GPG验证签名+sha512sum -c校验，命令写死在纸上；任何一处不对直接U盘烧毁，绝不心软。
+安装Qubes时强制启用Heads/PureBoot + measured boot模式，插上Librem Key或Nitrokey，第一次boot必须看到“TPM PCRs match expected values”绿灯；红灯直接物理毁机（锤子+钻头），绝不尝试修复。
+sys-net模板只用最小化安装，sys-firewall也最小模板，所有netvm流量强制走物理以太网卡，绝不开任何无线驱动；dom0里执行qvm-prefs sys-net netvm none锁死，防止任何意外连网。
+一次性在模板里clone 6个以上Whonix AppVM，每7天严格在dom0执行qvm-remove -f oldvm && shred -u -z -n 5 /var/lib/qubes/vm-templates/oldvm-private彻底擦私有卷，再从干净Whonix模板全量reclone新VM，名字用随机字符串。
+最重要操作永远重启进Tails U盘（Etcher刻录后GPG验证），做完立刻在Tails终端执行sudo shred -u -z -n 3 /dev/sdX擦整个U盘，然后拿出来物理砸碎或带走扔不同城市的垃圾桶，笔记本绝不留任何U盘痕迹。
+每个Whonix里Tor强制用obfs4/meek/snowflake轮换，torrc里写死10条以上桥接，每小时执行tor --hup重载新桥接池；用tor-resolve check.torproject.org验证桥接成功。
+同时跑I2P，所有出站流量严格Tor→I2P→目标（或反向），用Whonix官方测试脚本i2p-tor-test确认零泄露；配置文件放VeraCrypt隐藏卷里，改动后立刻随机改文件名。
+Tor Browser永远Safest模式，NoScript全禁，额外装CanvasBlocker+uBlock Origin；注册任何东西前必须点菜单“New Tor Circuit for this Site”换电路，再终端执行torify curl ifconfig.me确认出口IP彻底不同才动手。
+每个假身份的人生故事必须死记硬背到能梦里说出来，所有聊天发帖100%套用，绝不加一个真实字，哪怕“今天天气不错”都要按故事里的城市天气说。
+每句话先丢Ollama本地模型（用Llama3 70B）改写，再手动过一遍：加专属口癖（加拿大那个加“eh”，德国那个多复合句），故意插1-2个错别字或方言，拉开句子长度分布；改完读三遍确认stylometry工具测不出原味。
+打字节奏、上下线时间、访问顺序用airgap旧ThinkPad上的python脚本生成（random.seed从diceware来），每周期强制偏移2-4小时；脚本每周在airgap机重新跑一次，输出打印到纸上照着执行。
+所有密码密钥只在完全拆掉无线网卡+摄像头+麦克风的旧ThinkPad上用diceware 8个词以上生成，KeePassXC数据库导出到防水纸，分两份存完全不同物理地点（一个埋山里，一个朋友家），生成后立刻shred -u -z -n 10删干净。
+VeraCrypt容器用AES-Twofish-Serpent级联加密+隐藏卷，表面卷扔些无关紧要的假文件（旧电影种子什么的），隐藏卷再套30+字符随机passphrase+keyfile；文件名和路径每次操作完用mv随机改成无意义字符串。
+聊天只用Session或SimpleX .onion版（从.onion地址下载GPG验证），每次聊天开始手动比对安全码截图存VeraCrypt隐藏卷，每30天弃旧建新账号，旧账号彻底删库走人。
+输入法永远Rime离线版（提前下载词库），语言/时区/键盘布局在每个VM里锁死对应假身份国家（加拿大用en_CA，德国de_DE），用timedatectl set-timezone和localectl set-x11-keymap命令硬锁。
+所有图片头像用本地Stable Diffusion + ControlNet生成，prompt每次在airgap机随机生成（加noise参数），seed不同，绝不重用同一组参数；生成后用exiftool -all= image.png彻底清元数据。
+操作结束必须先BleachBit -s全清（勾选所有选项），再终端 sfill -z -l -v /三遍擦临时区，最后qvm-shutdown --all关所有VM；确认dom0里df -h看到空间恢复。
+每30天整机做一次cryptographic erase：用hdparm --security-erase-enhanced /dev/nvme0n1或sedutil擦SSD，必要时拿出来物理破坏（钻孔+锤子），新盘再重装整个Qubes。
+开机第一件事插Librem Key或Nitrokey，检查boot integrity日志必须全绿；红灯或任何警告直接物理毁机（不带走任何零件），换新机重来。
+所有重要服务和网站只走.onion隐藏地址，明网一律不用；书签全存Tor Browser里，文件名随机，定期用BleachBit清。
+所有付款只用Monero官方GUI钱包，地址每次新生成（view-only钱包存airgap机），转账后立刻monero-wallet-cli --sweep_all清空临时地址。
+注册任何账号前必须先New Tor Circuit，再torify curl ifconfig.me确认IP换了至少两次，才输入假信息；注册完立刻截图存隐藏卷，账号用完就弃。
+整套设备永远不休眠不待机，操作完立刻poweroff，拔电源塞法拉第袋，安全屋走时换新地点；每3个月换一次安全屋，旧屋用漂白水擦所有接触面。
+"There is no such thing as perfect security in this world."
